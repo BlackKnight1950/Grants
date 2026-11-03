@@ -1,4 +1,4 @@
-# CCH Grants Command Center (Smartsheet edition)
+# CCH Grants Command Center
 
 A web app for tracking grants from pre-award through closeout: award set-up and Board gating, spend pace and
 lapse risk, budget lines, invoices and drawdowns, time and effort, reports, subrecipients, amendments, closeout,
