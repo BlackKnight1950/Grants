@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Import data · CCH Grants Command Center</title>
+<style>
+  body{margin:0;background:#f7f5f0;color:#12203a;font-family:Arial,Helvetica,sans-serif;padding:30px 20px}
+  .box{background:#fff;border:1px solid #d8d3c7;border-radius:14px;padding:26px 28px;max-width:640px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 8px} p,li{color:#5b6572;font-size:14px;line-height:1.6}
+  button{padding:10px 18px;border:0;border-radius:9px;background:#12203a;color:#f7f5f0;font-weight:700;cursor:pointer;margin-top:10px}
+  .out{margin-top:16px;padding:12px;border-radius:8px;background:#fbf9f4;border:1px solid #d8d3c7;font-size:14px;display:none;white-space:pre-wrap}
+  a{color:#5c4518}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>Import data</h1>
+  <p>Load a JSON file made by this system's Backup, or the starter data file. Records that already exist are skipped unless you tick overwrite.</p>
+  <input type="file" id="file" accept="application/json,.json"><br>
+  <label style="font-size:14px"><input type="checkbox" id="over"> Overwrite records that already exist</label><br>
+  <button id="go">Import</button>
+  <div class="out" id="out"></div>
+  <p><a href="/">Back to the app</a> · <a href="/api/export">Download a backup</a></p>
+</div>
+<script src="/import.js"></script>
+</body>
+</html>
