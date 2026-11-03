@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CCH Grants Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0; --panel: #ffffff; --panel-2: #fbf9f4; --ink: #12203a; --ink-soft: #5b6572;
+    --accent: #c9973f; --accent-ink: #5c4518; --good: #3f7a53; --good-bg: #dcebe0;
+    --bad: #b3432b; --bad-bg: #f5dcd4; --warn: #9a6b12; --warn-bg: #f6e8c6; --border: #d8d3c7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1930; --panel: #16274a; --panel-2: #132040; --ink: #f3f1ea; --ink-soft: #aab4c2;
+      --border: #2c3e5c; --good-bg: #16352380; --bad-bg: #3a1c1580; --warn-bg: #4a381080; --warn:#e8c46f;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: Arial, Helvetica, sans-serif;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); min-height:100%; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 40px 28px 80px; }
+  h1,h2,h3 { font-family:'Space Grotesk', Arial, sans-serif; font-weight:600; margin:0; }
+  h1 { font-size: 34px; } h2 { font-size: 22px; } h3 { font-size: 17px; }
+  p { line-height: 1.5; }
+  .muted { color: var(--ink-soft); } .small { font-size: 13px; }
+  header.top { display:flex; flex-direction:column; gap:6px; margin-bottom:28px; }
+  .tabs { display:flex; gap:8px; margin-bottom:24px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .tab-btn { appearance:none; border:none; background:transparent; cursor:pointer; padding:12px 18px;
+    font-family:'Space Grotesk',Arial,sans-serif; font-weight:600; font-size:15px; color:var(--ink-soft);
+    border-bottom:3px solid transparent; margin-bottom:-1px; }
+  .tab-btn.active { color:var(--ink); border-bottom-color:var(--accent); }
+  .panel { display:none; flex-direction:column; gap:22px; } .panel.active { display:flex; }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:22px 24px; }
+  .grid-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; }
+  .stat { background:var(--panel-2); border:1px solid var(--border); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column; gap:4px; }
+  .stat .num { font-family:'Space Grotesk',Arial,sans-serif; font-size:28px; font-weight:700; color:var(--accent); }
+  .stat .num.bad { color: var(--bad); }
+  .scroll { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; padding:10px 12px; color:var(--ink-soft); font-size:12px; text-transform:uppercase; letter-spacing:0.4px; border-bottom:2px solid var(--border); white-space:nowrap; }
+  td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  tr.click { cursor:pointer; } tr.click:hover td { background: var(--panel-2); }
+  select, input[type=number], input[type=date], input[type=text], textarea {
+    font-family:Arial,Helvetica,sans-serif; font-size:14px; padding:7px 9px; border:1px solid var(--border);
+    border-radius:8px; background:var(--panel); color:var(--ink); width:100%; }
+  input[type=checkbox] { width:18px; height:18px; accent-color: var(--good); cursor:pointer; }
+  button.primary { appearance:none; border:none; background:var(--ink); color:var(--bg); font-family:'Space Grotesk',Arial,sans-serif;
+    font-weight:600; font-size:14px; padding:10px 18px; border-radius:9px; cursor:pointer; }
+  button.primary:disabled { opacity:0.4; cursor:not-allowed; }
+  button.ghost { appearance:none; border:1px solid var(--border); background:transparent; color:var(--ink); font-size:13px;
+    padding:7px 12px; border-radius:8px; cursor:pointer; font-family:Arial,Helvetica,sans-serif; }
+  button.ghost:disabled { opacity:0.4; cursor:not-allowed; }
+  button.ghost.danger { color: var(--bad); border-color: var(--bad); }
+  .pill { display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:700; white-space:nowrap; }
+  .pill.green { background:var(--good-bg); color:var(--good); }
+  .pill.yellow { background:var(--warn-bg); color:var(--warn); }
+  .pill.red { background:var(--bad-bg); color:var(--bad); }
+  .pill.grey { background:#e4e9f0; color:#2b3e5c; }
+  .flag-ok { color:var(--good); font-weight:700; } .flag-bad { color:var(--bad); font-weight:700; } .flag-warn { color:var(--warn); font-weight:700; }
+  .bar-track { height:10px; background:var(--panel-2); border-radius:6px; overflow:hidden; border:1px solid var(--border); position:relative; min-width:90px; }
+  .bar-seg { height:100%; position:absolute; left:0; top:0; }
+  form.row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
+  .field { display:flex; flex-direction:column; gap:4px; min-width:140px; }
+  .field label { font-size:12px; color:var(--ink-soft); font-weight:600; }
+  .check { display:flex; gap:8px; align-items:center; font-size:14px; padding:8px 0; min-width:260px; }
+  .banner { padding:14px 16px; border-radius:10px; font-size:14px; }
+  .banner.readonly { background:var(--bad-bg); color:var(--bad); }
+  .banner.good { background:var(--good-bg); color:var(--good); } .banner.warn { background:var(--warn-bg); color:var(--warn); } .banner.bad { background:var(--bad-bg); color:var(--bad); }
+  .empty { color:var(--ink-soft); font-style:italic; padding:10px 0; }
+  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; }
+  .compare { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+  .compare .stat .num { font-size:22px; }
+  .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px 24px; font-size:14px; }
+  .facts b { display:block; font-size:12px; color:var(--ink-soft); font-weight:600; margin-bottom:2px; }
+  pre.brief { white-space:pre-wrap; font-family: Arial, Helvetica, sans-serif; font-size:13px; line-height:1.55; background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin:0 0 12px; }
+  .phases { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .phase-btn { appearance:none; border:1px solid var(--border); background:var(--panel); color:var(--ink-soft); cursor:pointer; padding:9px 16px; border-radius:999px;
+    font-family:'Space Grotesk',Arial,sans-serif; font-weight:600; font-size:14px; }
+  .phase-btn.active { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .stack { display:flex; flex-direction:column; gap:22px; }
+  .phase-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+  .phase-card { background:var(--panel); border:1px solid var(--border); border-top:4px solid var(--accent); border-radius:14px; padding:18px 20px; }
+  .phase-card h3 { margin-bottom:8px; } .phase-card ul { margin:0; padding-left:18px; font-size:14px; line-height:1.7; }
+  #detailBody, #spendBody { display:flex; flex-direction:column; gap:22px; }
+  footer.note { margin-top:30px; }
+  @media (max-width:640px){ .wrap{padding:24px 16px 60px;} h1{font-size:26px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="small muted" style="letter-spacing:1px; font-weight:700; color:var(--accent);">COOK COUNTY HEALTH · GRANTS MANAGEMENT</p>
+    <h1>Grants Command Center</h1>
+    <p class="muted">From Notice of Award to the last dollar spent. Every award gets a backward-planned clock, parallel tracks, the Board calendar, a spend-pace check against the full award life, and a shared risk log, so a lapse shows up in month 2, not month 11.</p>
+  </header>
+
+  <div id="readonlyBanner" class="banner readonly" style="display:none; margin-bottom:20px;">
+    You're viewing this read-only. Ask the Grants Director for edit access to add awards, update tasks, or enter spend.
+  </div>
+
+  <div id="phaseNav" class="phases"></div>
+  <nav class="tabs" id="tabNav"></nav>
+  <div id="grantBar" class="card" style="display:none; padding:14px 20px; margin-bottom:22px;"><div class="field" style="max-width:480px;"><label>Grant</label><select id="gsel"></select></div></div>
+
+  <!-- PORTFOLIO -->
+  <section class="panel active" id="panel-portfolio">
+    <div class="phase-cards" id="phaseCards"></div>
+    <div class="grid-stats" id="pfStats"></div>
+    <div class="card">
+      <h2 style="margin-bottom:6px;">Grant portfolio</h2>
+      <p class="small muted" style="margin-bottom:14px;">Sorted by risk. Click a grant to open its tracks. Spend pace compares dollars spent with the share of the <b>whole award life</b> that has elapsed, so a multi-year award can't look healthy just because the current year is young. "Lapse risk" is the part of the award projected to go unspent.</p>
+      <div class="scroll" id="pfTable"><p class="empty">Loading…</p></div>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom:6px;">Action queue</h2>
+      <p class="small muted" style="margin-bottom:14px;">Open dated tasks that are overdue or due in the next 21 days, across all grants. If something was already done, mark it done.</p>
+      <div class="scroll" id="pfQueue"><p class="empty">Nothing due.</p></div>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom:6px;">Data gaps to close</h2>
+      <p class="small muted" style="margin-bottom:14px;">What the portfolio can't see yet. Every gap is a place a deadline or a dollar can slip.</p>
+      <div id="pfGaps"></div>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom:6px;">Weekly brief</h2>
+      <p class="small muted" style="margin-bottom:12px;">Generated from live data in the weekly-status format: grant, RAG, pace, next date, and the ask.</p>
+      <pre class="brief" id="briefText"></pre>
+      <button class="ghost" id="briefCopy">Copy brief</button> <span class="small muted" id="briefMsg"></span>
+      <button class="ghost" id="lifeAll" style="margin-left:12px;" disabled>Add lifecycle checkpoints to every grant</button>
+    </div>
+  </section>
+
+  <!-- INTAKE -->
+  <section class="panel" id="panel-intake">
+    <div class="card">
+      <h2 style="margin-bottom:6px;">New award or pre-award readiness check</h2>
+      <p class="small muted" style="margin-bottom:14px;">Enter the award terms and the answers to the process-map questions. The plan below updates live. Save it and the tasks, owners, due dates, reporting checkpoints and spend plan are created for you.</p>
+      <form class="row" id="intakeForm">
+        <div class="field" style="flex:2; min-width:260px;"><label>Start from a template (optional)</label><select id="in-template"><option value="">None</option></select></div>
+        <div style="flex-basis:100%; height:0;"></div>
+        <div class="field" style="flex:2; min-width:240px;"><label>Grant name</label><input type="text" id="in-name" required></div>
+        <div class="field" style="flex:1.2;"><label>Funder</label><input type="text" id="in-funder"></div>
+        <div class="field" style="flex:1.2;"><label>Sponsor</label><input type="text" id="in-sponsor"></div>
+        <div class="field" style="flex:1.2;"><label>Program manager</label><input type="text" id="in-mgr"></div>
+        <div class="field"><label>Governance tier</label>
+          <select id="in-tier"><option value="1">Tier 1 · Full charter &amp; plan</option><option value="2" selected>Tier 2 · Charter-Lite</option><option value="3">Tier 3 · Tracker only</option></select></div>
+        <div style="flex-basis:100%; height:0;"></div>
+        <div class="field"><label>Total award ($)</label><input type="number" id="in-amount" min="0" step="any" value="500000" required></div>
+        <div class="field"><label>NOA received</label><input type="date" id="in-noa" required></div>
+        <div class="field"><label>Current period start</label><input type="date" id="in-start" required></div>
+        <div class="field"><label>Current period end</label><input type="date" id="in-end" required></div>
+        <div class="field"><label>Award start (multi-year, optional)</label><input type="date" id="in-tstart"></div>
+        <div class="field"><label>Award end (multi-year, optional)</label><input type="date" id="in-tend"></div>
+        <div class="field"><label>Next funder report due</label><input type="date" id="in-report"></div>
+        <div class="field"><label>Report type</label><input type="text" id="in-reporttype" placeholder="PPR, FFR…"></div>
+        <div style="flex-basis:100%; height:0;"></div>
+        <label class="check"><input type="checkbox" id="in-hiring"> Requires new hiring</label>
+        <label class="check"><input type="checkbox" id="in-existing"> Existing staff will work on the grant</label>
+        <label class="check"><input type="checkbox" id="in-subs"> Has subrecipients</label>
+        <label class="check"><input type="checkbox" id="in-subs150"> Subrecipient contracts over $150k</label>
+        <div style="flex-basis:100%; height:0;"></div>
+        <div class="field" style="min-width:280px;"><label>Planning mode</label>
+          <select id="in-mode">
+            <option value="parallel">Parallel tracks (recommended)</option>
+            <option value="serial">As mapped today (one after another)</option>
+          </select>
+        </div>
+        <button class="primary" type="submit" id="in-save">Create award &amp; tracks</button>
+        <button class="ghost" type="button" id="in-savetpl">Save as template</button>
+        <button class="ghost" type="button" id="in-demo">Load a demo grant</button>
+      </form>
+    </div>
+    <div class="card" id="previewCard">
+      <h2 style="margin-bottom:12px;">Readiness preview</h2>
+      <div id="preview"><p class="empty">Fill in the award to see the plan.</p></div>
+    </div>
+  </section>
+
+  <!-- DETAIL -->
+  <section class="panel" id="panel-detail">
+    <div id="detailBody"><div class="card"><p class="empty">Select a grant.</p></div></div>
+  </section>
+
+  <!-- SPEND -->
+  <section class="panel" id="panel-spend">
+    <div id="spendBody"><div class="card"><p class="empty">Select a grant.</p></div></div>
+  </section>
+
+  <!-- REQUESTS -->
+  <section class="panel" id="panel-requests">
+    <div id="reqBody" style="display:flex; flex-direction:column; gap:22px;"><div class="card"><p class="empty">Select a grant.</p></div></div>
+  </section>
+
+  <!-- NEW MODULES -->
+  <section class="panel" id="panel-pipeline"><div class="stack" id="pipelineBody"></div></section>
+  <section class="panel" id="panel-application"><div class="stack" id="applicationBody"></div></section>
+  <section class="panel" id="panel-templates"><div class="stack" id="templatesBody"></div></section>
+  <section class="panel" id="panel-budget"><div class="stack" id="budgetBody"></div></section>
+  <section class="panel" id="panel-cash"><div class="stack" id="cashBody"></div></section>
+  <section class="panel" id="panel-effort"><div class="stack" id="effortBody"></div></section>
+  <section class="panel" id="panel-reports"><div class="stack" id="reportsBody"></div></section>
+  <section class="panel" id="panel-subs"><div class="stack" id="subsBody"></div></section>
+  <section class="panel" id="panel-amend"><div class="stack" id="amendBody"></div></section>
+  <section class="panel" id="panel-closeout"><div class="stack" id="closeoutBody"></div></section>
+  <section class="panel" id="panel-connsubmit"><div class="stack" id="connSubmitBody"></div></section>
+  <section class="panel" id="panel-conntrack"><div class="stack" id="connTrackBody"></div></section>
+  <section class="panel" id="panel-activity"><div class="stack" id="activityBody"></div></section>
+  <section class="panel" id="panel-config"><div class="stack" id="configBody"></div></section>
+
+  <!-- RISKS -->
+  <section class="panel" id="panel-risks">
+    <div class="grid-stats" id="riskStats"></div>
+    <div class="card">
+      <h2 style="margin-bottom:6px;">Risk &amp; issue log</h2>
+      <p class="small muted" style="margin-bottom:14px;">Score = probability × impact (1–3 each). <b>Stale</b> means not reviewed in 14+ days. <b>Past trigger</b> means the decision date has passed. A log nobody reviews is just a document.</p>
+      <div class="scroll" id="riskTable"><p class="empty">No risks logged.</p></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:10px;">Log a risk or issue</h3>
+      <form class="row" id="riskForm">
+        <div class="field" style="flex:2; min-width:240px;"><label>Title</label><input type="text" id="rk-title" required></div>
+        <div class="field" style="flex:1.4; min-width:200px;"><label>Grant / project</label><input type="text" id="rk-grant" list="grantNames"><datalist id="grantNames"></datalist></div>
+        <div class="field"><label>Type</label><select id="rk-type"><option>Risk</option><option>Issue</option></select></div>
+        <div class="field"><label>Probability</label><select id="rk-prob"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
+        <div class="field"><label>Impact</label><select id="rk-impact"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
+        <div class="field"><label>Owner</label><input type="text" id="rk-owner"></div>
+        <div class="field"><label>Response</label><select id="rk-resp"><option>Mitigate</option><option>Avoid</option><option>Transfer</option><option>Accept</option><option>Escalate</option></select></div>
+        <div class="field"><label>Trigger / decision date</label><input type="date" id="rk-trigger"></div>
+        <div class="field" style="flex:3; min-width:300px;"><label>Mitigation / action plan</label><input type="text" id="rk-plan"></div>
+        <button class="primary" type="submit">Log it</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section class="panel" id="panel-calendar">
+    <div class="card">
+      <h2 style="margin-bottom:6px;">CCH Board calendar</h2>
+      <p class="small muted" style="margin-bottom:14px;">The Board cycle is the hardest constraint in the process. Missing a submission cutoff costs a full cycle, so work backward from the cutoff, not the meeting date. Meeting dates marked "from SUD Grant Portfolio" came from your sheets. Cutoffs are estimates (21 days before) until confirmed with the Board office.</p>
+      <div class="scroll" id="boardTable"><p class="empty">No meetings on the calendar.</p></div>
+      <form class="row" id="meetingForm" style="margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">
+        <div class="field"><label>Meeting date</label><input type="date" id="bm-date" required></div>
+        <div class="field"><label>Submission cutoff</label><input type="date" id="bm-submit" required></div>
+        <div class="field" style="flex:1; min-width:220px;"><label>Note</label><input type="text" id="bm-note"></div>
+        <button class="primary" type="submit">Add meeting</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom:6px;">Open Board items</h2>
+      <div class="scroll" id="boardItems"><p class="empty">None.</p></div>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom:6px;">Lead-time assumptions (days)</h2>
+      <p class="small muted" style="margin-bottom:14px;">These drive every generated due date. Replace the starting values with what CCH actually experiences. After a few months, measured cycle times should replace guesses.</p>
+      <div class="row" id="ltForm" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+    </div>
+  </section>
+
+  <footer class="note">
+    <p class="small muted">Shared, live view: changes made here are visible to everyone with this link. Dates are planning estimates built from the lead times above, not official approvals. Confirm Board and contract requirements with the responsible office.</p>
+  </footer>
+</div>
+
+<script src="/shim.js"></script>
+<script src="/app.js" defer></script>
+</body>
+</html>
