@@ -1,0 +1,20 @@
+{
+  "name": "cch-grants-command-center",
+  "version": "2.0.0",
+  "description": "Grants Command Center for Cook County Health. Smartsheet is the database.",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "setup": "node scripts/setup.js",
+    "doctor": "node scripts/doctor.js",
+    "demo": "node scripts/dev-mock.js",
+    "test": "node test/smoke.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

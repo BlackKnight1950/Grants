@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.log
+.DS_Store
+# Real grant data. Keep it out of Git. Load it through /import after deploying.
+seed/seed.json
+exports/

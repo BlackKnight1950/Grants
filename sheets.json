@@ -1,0 +1,22 @@
+{
+  "_note": "Smartsheet sheet IDs for the app. IDs are not secret (access still needs the API token). Override with the SHEET_IDS env var if needed.",
+  "grants":        { "id": "8281781443972996", "permalink": "https://app.smartsheet.com/sheets/ghh7QJQv4cQcG5XF6GhqRH595W2WjCW3JcC4m7j1" },
+  "tasks":         { "id": "1851364461465476", "permalink": "https://app.smartsheet.com/sheets/C82G5gq2PV6g3rFpGmR8V5C2VjJhXrc83g7H9Mj1" },
+  "boardmeetings": { "id": "8368612797796228", "permalink": "https://app.smartsheet.com/sheets/hxgRX6Rrh6jwrxp4w787xXh9qQ9R84Hx626jH861" },
+  "positions":     { "id": "3167756905303940", "permalink": "https://app.smartsheet.com/sheets/xMHP6g657823wqrPwGrh8X3GQRVMVRm684v2qf81" },
+  "requests":      { "id": "5521126789959556", "permalink": "https://app.smartsheet.com/sheets/FQVfwhXmvJGV7855C69GWvVv4vrJPjqc4wmjpqf1" },
+  "risks":         { "id": "5590524871528324", "permalink": "https://app.smartsheet.com/sheets/Fp88jg8x9CpHQ4GVppxVMGVGJ8w9C4jgwmHFGXj1" },
+  "settings":      { "id": "8192325865131908", "permalink": "https://app.smartsheet.com/sheets/qrQqWgXQVchqwmHFc8HGgCC5vGfP9FR25J7whWM1" },
+  "budgetlines":   { "id": "3121231672070020", "permalink": "https://app.smartsheet.com/sheets/5cGjvV7Xmg6j546vc3vrrRr7CW5wC2mHwfHJ5CC1" },
+  "invoices":      { "id": "4156149139197828", "permalink": "https://app.smartsheet.com/sheets/ffX9mgQCPwC69qQh5WPG2rvPhrqfm5McvHHwqPh1" },
+  "drawdowns":     { "id": "7842324685213572", "permalink": "https://app.smartsheet.com/sheets/Wvrv8x8gg3cprm9GVM58v6G75M2mcMFWJRWjCMC1" },
+  "timeeffort":    { "id": "4341131770023812", "permalink": "https://app.smartsheet.com/sheets/VpVC9xWhhxw3gCxJhvwgXc2jh7pjpxX4xqVvhMc1" },
+  "reports":       { "id": "1569855125016452", "permalink": "https://app.smartsheet.com/sheets/8GM2V76r29X27gR9g3h2pHPJj6F2XGM8pF7hjh41" },
+  "measures":      { "id": "1926531220983684", "permalink": "https://app.smartsheet.com/sheets/865wcjcHqCMfjPQV9pqpQRR77Mm63v3V6XMGj821" },
+  "amendments":    { "id": "8844731397394308", "permalink": "https://app.smartsheet.com/sheets/3GM2Ppc6RGPpcMFjxpHmcGFqMhQwGCj993xX34v1" },
+  "subs":          { "id": "4707883322396548", "permalink": "https://app.smartsheet.com/sheets/wXC77JCqc4JWhFJCRq7vX3cX5W9mr7WFwxvPQRP1" },
+  "monitoring":    { "id": "7772926603644804", "permalink": "https://app.smartsheet.com/sheets/HW6qv5Xpp6M9gJrh6w5rMjJ4X26xm2W2QcqJmcH1" },
+  "opps":          { "id": "7418059225780100", "permalink": "https://app.smartsheet.com/sheets/pFRhWGPQxg6H3vXM8FGH3X5M3Chx2xJ2qvp7QGV1" },
+  "templates":     { "id": "6430130848354180", "permalink": "https://app.smartsheet.com/sheets/MRgCFgX3V2pq8V68wRgwR9jWXrXFXJ22jJ8FWRH1" },
+  "activity":      { "id": "4576519600164740", "permalink": "https://app.smartsheet.com/sheets/FvhxCj5X69X64G5f846gC3rFpF4V95Hg9WQFqHr1" }
+}

@@ -1,0 +1,24 @@
+# Render Blueprint for the Smartsheet edition. No database is needed: Smartsheet is the database.
+# In Render: New > Blueprint > choose this GitHub repository. Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: cch-grants-command-center
+    runtime: node
+    # "starter" keeps the service awake. A free web service sleeps after 15 idle minutes and wakes slowly.
+    plan: starter
+    # Keep this at ONE instance. The app caches Smartsheet data in memory and queues writes per sheet.
+    numInstances: 1
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: SMARTSHEET_ACCESS_TOKEN
+        sync: false   # Render will ask you for this. Paste the Smartsheet API token.
+      - key: SMARTSHEET_API_BASE
+        value: https://api.smartsheet.com/2.0   # Smartsheet Gov: https://api.smartsheetgov.com/2.0
+      - key: POLL_SECONDS
+        value: "20"
